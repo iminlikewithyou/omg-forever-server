@@ -1,0 +1,16 @@
+@namespace s "library://ns.adobe.com/flex/spark";
+@namespace mx "library://ns.adobe.com/flex/mx";
+@namespace components "components.*";
+
+/*
+Components
+ */
+
+s|VScrollBar {
+    skinClass: ClassReference("skins.CustomVScrollBarSkin");
+}
+
+.scrollBar {
+    thumb_color: #d3d3d3;
+    track_color: #eeeeee;
+}

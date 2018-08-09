@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
+               xmlns:s="library://ns.adobe.com/flex/spark"
+               creationComplete="onComplete(event)"
+               xmlns:local="components.*"
+               backgroundColor="0xedf2f8">
+    
+    <fx:Style source="/assets/css/global.css" />
+    
+    <fx:Script><![CDATA[
+        import components.Console;
+        
+        import mx.events.FlexEvent;
+        
+        private function onComplete(event: FlexEvent): void
+        {
+            txtInput.addEventListener(KeyboardEvent.KEY_DOWN, function (keyboardEvent: KeyboardEvent): void
+            {
+                if (keyboardEvent.keyCode == Keyboard.ENTER && txtInput.text.length > 0)
+                {
+                    // Input
+                    command(txtInput.text);
+                    txtInput.text = "";
+                }
+            });
+        }
+        
+        private function command(str: String): void
+        {
+            // A Console command
+            Console.log(str, "input");
+        }
+        ]]></fx:Script>
+    
+    <s:VGroup width="100%"
+              height="100%"
+              gap="2">
+        <s:VGroup width="100%"
+                  height="100%"
+                  padding="4">
+            <local:Console id="console"
+                           width="100%"></local:Console>
+        </s:VGroup>
+        
+        <s:TextInput id="txtInput"
+                     width="100%"
+                     focusAlpha="0"
+                     skinClass="skins.CustomTextInputSkin" />
+    </s:VGroup>
+
+</s:Application>
