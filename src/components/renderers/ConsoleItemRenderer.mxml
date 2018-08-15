@@ -120,7 +120,8 @@
                           verticalAlign="middle">
                     <s:Label id="txt"
                              width="100%"
-                             fontSize="12" />
+                             fontSize="12"
+                             fontFamily="Ubuntu" />
                 </s:VGroup>
             
             </s:HGroup>

@@ -3,6 +3,17 @@
 @namespace components "components.*";
 
 /*
+Fonts
+ */
+
+@font-face {
+    src: url("/assets/fonts/Ubuntu.ttf");
+    fontFamily: Ubuntu;
+    fontWeight: normal;
+    fontStyle: normal;
+}
+
+/*
 Components
  */
 

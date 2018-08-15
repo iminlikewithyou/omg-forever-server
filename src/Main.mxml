@@ -12,8 +12,15 @@
         
         import mx.events.FlexEvent;
         
+        private var server:Server;
+        
         private function onComplete(event: FlexEvent): void
         {
+            // TODO Rework hardcoded sections to use CSS instead
+            // TODO Server should autosave periodically instead of on exit
+            // TODO Service's Lorem Ipsum generator should get its word list from an embedded JSON instead of being hardcoded
+            // TODO Policy, VerifyEmail, and ResetCodeEmail should be embedded
+            
             txtInput.addEventListener(KeyboardEvent.KEY_DOWN, function (keyboardEvent: KeyboardEvent): void
             {
                 if (keyboardEvent.keyCode == Keyboard.ENTER && txtInput.text.length > 0)
@@ -23,6 +30,9 @@
                     txtInput.text = "";
                 }
             });
+            
+            // Start server
+            server = new Server();
         }
         
         private function command(str: String): void
