@@ -3,8 +3,8 @@ package
 
     import components.Console;
 
-    import flash.net.*;
     import flash.events.*;
+    import flash.net.*;
     import flash.utils.ByteArray;
 
     import mx.utils.UIDUtil;
@@ -32,9 +32,11 @@ package
             ip = socket.remoteAddress;
 
             // Listen for the socket to close (a session disconnects)
+
             socket.addEventListener(Event.CLOSE, function (e: Event): void
             {
-                dispatchEvent(new Event(Session.DISCONNECT));
+                if (policy)
+                    dispatchEvent(new Event(Session.DISCONNECT));
             });
 
             // Listen for data from the socket
@@ -46,6 +48,10 @@ package
                     data = socket.readObject();
                     socket.flush();
                     dispatchEvent(new MessageEvent(data));
+
+                    // Set policy to true
+                    policy = true;
+                    Console.log("Session (" + id + ") connected\n  " + socket.remoteAddress, "userJoined", {ip: socket.remoteAddress});
                 }
                 catch (error: Error)
                 {
@@ -55,9 +61,6 @@ package
                     socket.writeByte(0);
                     socket.flush();
                 }
-
-                // Set policy to true
-                policy = true;
             });
 
             // Generate a session id

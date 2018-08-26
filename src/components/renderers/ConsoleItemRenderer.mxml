@@ -108,11 +108,11 @@
                 
                 // Append the location text
                 var locObj: Object = JSON.parse(loc);
-                txt.text += "; " + locObj.city + ", " + locObj.region_name + " ," + locObj.country_name;
+                txt.text += "; " + locObj.city + " (" + locObj.region_name + "), " + locObj.country_name;
             }
         }
         
-        private function show() : void
+        private function show(): void
         {
             alpha = 1;
         }

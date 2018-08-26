@@ -58,8 +58,6 @@ package
             // Session event listeners
             session.addEventListener(Session.DISCONNECT, handleDisconnect);
             session.addEventListener(MessageEvent.DATA, handleDataReceived);
-
-            Console.log("Session (" + session.id + ") connected\n  " + session.socket.remoteAddress, "userJoined", {ip: session.socket.remoteAddress});
         }
 
         private function handleDisconnect(e: Event): void
