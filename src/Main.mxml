@@ -12,7 +12,7 @@
         
         import mx.events.FlexEvent;
         
-        private var server:Server;
+        private var server: Server;
         
         private function onComplete(event: FlexEvent): void
         {

@@ -33,9 +33,9 @@
             locked = (list.scroller.verticalScrollBar.value == list.scroller.verticalScrollBar.maximum);
         }
         
-        public static function log(message: String, type: String = null): void
+        public static function log(message: String, type: String = null, payload: Object = null): void
         {
-            data.addItem({message: message, type: type});
+            data.addItem({message: message, type: type, payload: payload});
         }
         
         private function onChange(event: Event): void

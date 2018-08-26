@@ -35,6 +35,12 @@ package
         [Embed(source="/assets/icons/email.png")]
         public static const ICON_EMAIL: Class;
 
+        [Embed(source="/assets/icons/userJoined.png")]
+        public static const ICON_USERJOINED: Class;
+
+        [Embed(source="/assets/icons/userLeft.png")]
+        public static const ICON_USERLEFT: Class;
+
         // Policy
 
         [Embed(source="/assets/policy.xml", mimeType="application/octet-stream")]
@@ -98,6 +104,7 @@ package
 
         public static function isValidEmail(str: String): Boolean
         {
+            // TODO redo this to allow all emails
             var emailExpression: RegExp = /([a-z0-9._-]+?)@([a-z0-9.-]+)\.([a-z]{2,4})/;
             return emailExpression.test(str);
         }

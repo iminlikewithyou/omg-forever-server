@@ -13,7 +13,11 @@ package
     {
         public static var DISCONNECT: String = "User_Disconnect";
 
+        private var locationManager: LocationManager;
+
         public var id: String;
+        public var location: Object;
+        public var ip: String;
 
         public var connected: Boolean;
         public var socket: Socket;
@@ -25,6 +29,7 @@ package
             policy = false;
             connected = true;
             this.socket = socket;
+            ip = socket.remoteAddress;
 
             // Listen for the socket to close (a session disconnects)
             socket.addEventListener(Event.CLOSE, function (e: Event): void
@@ -57,7 +62,21 @@ package
 
             // Generate a session id
             id = UIDUtil.createUID();
-            Console.log("Session (" + id + ") connected");
+
+            locationManager = LocationManager.getInstance();
+            location = locationManager.getLocation(ip);
+            if (!location)
+                locationManager.addEventListener(Event.COMPLETE, getLocationAgain);
+        }
+
+        private function getLocationAgain(event: Event): void
+        {
+            location = locationManager.getLocation(ip);
+            if (location)
+            {
+                locationManager.removeEventListener(Event.COMPLETE, getLocationAgain);
+                dispatchEvent(new SessionEvent(SessionEvent.LOCATION_FOUND));
+            }
         }
 
         public function send(data: Object): void
@@ -75,7 +94,6 @@ package
                     // There's no connection, or there was a problem with the connection
                     // Disconnect this socket and don't try to send any more messages to it
                     connected = false;
-                    Console.log("Session (" + id + ") disconnected");
                     dispatchEvent(new Event(Session.DISCONNECT));
                 }
             }

@@ -15,9 +15,12 @@
         
         private var contentColor: uint;
         private var backgroundColor: uint;
+        private var locationManager: LocationManager;
         
         private function onCreationComplete(event: FlexEvent): void
         {
+            locationManager = LocationManager.getInstance();
+            
             alpha = 0;
             update();
         }
@@ -30,7 +33,6 @@
             {
                 update();
             }
-        
         }
         
         private function update(): void
@@ -61,6 +63,14 @@
                         backgroundColor = 0x2A2D58;
                         contentColor = 0xffffff;
                         break;
+                    case "userJoined":
+                        backgroundColor = 0xB4EBCA;
+                        handleLocationText();
+                        break;
+                    case "userLeft":
+                        backgroundColor = 0xD9F2B4;
+                        handleLocationText();
+                        break;
                     default:
                         break;
                 }
@@ -80,7 +90,29 @@
             callLater(show);
         }
         
-        private function show(): void
+        private function handleLocationText(): void
+        {
+            var loc: String = locationManager.getLocation(data.payload.ip);
+            if (!loc)
+                locationManager.addEventListener(Event.COMPLETE, tryAppendLocationText);
+            
+            tryAppendLocationText(null);
+        }
+        
+        private function tryAppendLocationText(event: Event): void
+        {
+            var loc: String = locationManager.getLocation(data.payload.ip);
+            if (loc)
+            {
+                locationManager.removeEventListener(Event.COMPLETE, tryAppendLocationText);
+                
+                // Append the location text
+                var locObj: Object = JSON.parse(loc);
+                txt.text += "; " + locObj.city + ", " + locObj.region_name + " ," + locObj.country_name;
+            }
+        }
+        
+        private function show() : void
         {
             alpha = 1;
         }
@@ -109,11 +141,13 @@
                       width="100%"
                       height="100%">
                 
-                <s:Image id="icon"
-                         scaleMode="letterbox"
-                         height="16"
-                         width="16"
-                         smooth="true" />
+                <s:VGroup>
+                    <s:Image id="icon"
+                             scaleMode="letterbox"
+                             height="16"
+                             width="16"
+                             smooth="true" />
+                </s:VGroup>
                 
                 <s:VGroup width="100%"
                           height="100%"

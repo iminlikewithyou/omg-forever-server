@@ -51,13 +51,15 @@ package
 
         private function handleConnect(e: ServerSocketConnectEvent): void
         {
-            // When a Socket connects, create a Session for it
+            // When a Socket connects
             var session: Session = new Session(e.socket);
             sessions[session.id] = session;
 
             // Session event listeners
             session.addEventListener(Session.DISCONNECT, handleDisconnect);
             session.addEventListener(MessageEvent.DATA, handleDataReceived);
+
+            Console.log("Session (" + session.id + ") connected\n  " + session.socket.remoteAddress, "userJoined", {ip: session.socket.remoteAddress});
         }
 
         private function handleDisconnect(e: Event): void
@@ -65,7 +67,8 @@ package
             // When a Session disconnects
             var session: Session = (e.target as Session);
             delete sessions[session.id];
-            Console.log("Session (" + session.id + ") disconnected");
+
+            Console.log("Session (" + session.id + ") disconnected\n  " + session.socket.remoteAddress, "userLeft", {ip: session.socket.remoteAddress});
         }
 
         private function handleDataReceived(e: MessageEvent): void
