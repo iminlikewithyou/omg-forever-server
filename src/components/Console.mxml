@@ -35,7 +35,8 @@
         
         public static function log(message: String, type: String = null, payload: Object = null): void
         {
-            data.addItem({message: message, type: type, payload: payload});
+            var date:Date = new Date();
+            data.addItem({message: message, type: type, payload: payload, time: date.time});
         }
         
         private function onChange(event: Event): void

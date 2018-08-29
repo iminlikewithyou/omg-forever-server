@@ -11,7 +11,8 @@ package
 
     public class Session extends EventDispatcher
     {
-        public static var DISCONNECT: String = "User_Disconnect";
+        public static const DISCONNECT: String = "UserDisconnect";
+        public static const CONFIRM: String = "UserConfirm";
 
         private var locationManager: LocationManager;
 
@@ -19,7 +20,7 @@ package
         public var location: Object;
         public var ip: String;
 
-        public var connected: Boolean;
+        public var confirmed: Boolean;
         public var socket: Socket;
         public var data: Object;
         public var policy: Boolean;
@@ -27,7 +28,7 @@ package
         public function Session(socket: Socket): void
         {
             policy = false;
-            connected = true;
+            confirmed = false;
             this.socket = socket;
             ip = socket.remoteAddress;
 
@@ -51,7 +52,12 @@ package
 
                     // Set policy to true
                     policy = true;
-                    Console.log("Session (" + id + ") connected\n  " + socket.remoteAddress, "userJoined", {ip: socket.remoteAddress});
+
+                    if (!confirmed)
+                    {
+                        confirmed = true;
+                        dispatchEvent(new Event(Session.CONFIRM));
+                    }
                 }
                 catch (error: Error)
                 {
@@ -84,21 +90,18 @@ package
 
         public function send(data: Object): void
         {
-            if (connected)
+            try
             {
-                try
-                {
-                    // Try to send an object to the socket
-                    socket.writeObject(data);
-                    socket.flush();
-                }
-                catch (error: Error)
-                {
-                    // There's no connection, or there was a problem with the connection
-                    // Disconnect this socket and don't try to send any more messages to it
-                    connected = false;
-                    dispatchEvent(new Event(Session.DISCONNECT));
-                }
+                // Try to send an object to the socket
+                socket.writeObject(data);
+                socket.flush();
+            }
+            catch (error: Error)
+            {
+                // There's no connection, or there was a problem with the connection
+                // Disconnect this socket and don't try to send any more messages to it
+                confirmed = false;
+                dispatchEvent(new Event(Session.DISCONNECT));
             }
         }
     }

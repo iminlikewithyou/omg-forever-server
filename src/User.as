@@ -1,7 +1,7 @@
 package
 {
 
-    public class UserVO
+    public class User
     {
         // Public
         public var name: String;
@@ -17,11 +17,11 @@ package
         public var email: String;
         public var emailVerificationCode: String;
         public var emailVerified: Boolean;
-        public var passwordResetCode:String;
+        public var passwordResetCode: String;
         public var salt: String;
         public var password: String;
 
-        public function UserVO(obj: Object): void
+        public function User(obj: Object): void
         {
 
         }
