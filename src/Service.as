@@ -41,6 +41,9 @@ package
         [Embed(source="/assets/icons/userLeft.png")]
         public static const ICON_USERLEFT: Class;
 
+        [Embed(source="/assets/icons/stats.png")]
+        public static const ICON_STATS: Class;
+
         // Policy
 
         [Embed(source="/assets/policy.xml", mimeType="application/octet-stream")]

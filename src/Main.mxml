@@ -39,6 +39,18 @@
         {
             // A Console command
             Console.log(str, "input");
+            
+            switch (str)
+            {
+                case "save":
+                    DataManager.getInstance().saveDataToFile();
+                    break;
+                case "load":
+                    DataManager.getInstance().loadDataFromFile();
+                    break;
+                default:
+                    break;
+            }
         }
         ]]></fx:Script>
     
@@ -49,7 +61,7 @@
                   height="100%"
                   padding="4">
             <local:Console id="console"
-                           width="100%"></local:Console>
+                           width="100%" />
         </s:VGroup>
         
         <s:TextInput id="txtInput"

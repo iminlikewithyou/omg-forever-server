@@ -2,23 +2,15 @@ package
 {
 
     import components.Console;
-    import components.Console;
 
     import flash.events.*;
     import flash.filesystem.*;
     import flash.net.*;
 
-    import mx.utils.UIDUtil;
-
     public class Server extends EventDispatcher
     {
         private var sessions: Object;
         private var server: ServerSocket;
-
-        // Data
-        private var userNameIdPairs: Object;
-        private var users: Object;
-        private var rooms: Object;
 
         private var dataManager: DataManager;
 
@@ -38,12 +30,6 @@ package
                 fileStream.close();
             }
 
-            // TODO Populate users from data (User)
-            users = {};
-
-            // TODO Populate rooms from data (Room)
-            rooms = {};
-
             // Sessions start empty
             sessions = {};
 
@@ -52,7 +38,7 @@ package
             server.bind(Service.PORT);
             server.addEventListener(ServerSocketConnectEvent.CONNECT, handleConnect);
             server.listen();
-            Console.log("Server started on port " + Service.PORT);
+            Console.log("Started on port " + Service.PORT, "config");
         }
 
         private function handleConnect(e: ServerSocketConnectEvent): void
@@ -91,44 +77,13 @@ package
             var user: User;
 
             // Handle messages from all sessions, whether or not they are logged in
-            Console.log(JSON.stringify(m));
+            Console.log(JSON.stringify(m), "stats");
 
             if (m.hasOwnProperty("request"))
             {
                 // Handle a request
-                s.send({"request-return": {id: m.request, data: dataManager.getData(m.request)}});
+                s.send({"requestReturn": {id: m.request, data: dataManager.getData(m.request.id, m.request.category)}});
             }
-        }
-
-        private function userIdFromName(name: String): String
-        {
-            if (!userNameIdPairs)
-                userNameIdPairs = {};
-
-            if (!userNameIdPairs[name])
-            {
-                for each (var user: User in users)
-                {
-                    if (user.name == name)
-                    {
-                        userNameIdPairs[name] = user.id;
-                        break;
-                    }
-                }
-            }
-
-            return userNameIdPairs[name];
-        }
-
-        public function save(): void
-        {
-            // Save userData
-            var file: File = File.applicationStorageDirectory.resolvePath("data.json");
-            var fileStream: FileStream = new FileStream();
-            fileStream.open(file, FileMode.WRITE);
-            //TODO Save user and room data
-            //fileStream.writeUTFBytes(JSON.stringify(users) );
-            fileStream.close();
         }
 
         private function addUser(name: String, auth: Object): void

@@ -83,6 +83,10 @@
                         backgroundColor = 0xD9F2B4;
                         handleLocationText();
                         break;
+                    case "config":
+                        backgroundColor = 0x63718C;
+                        contentColor = 0xf9fafe;
+                        break;
                     default:
                         break;
                 }
