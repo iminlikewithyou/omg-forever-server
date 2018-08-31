@@ -2,6 +2,8 @@
 
 The Server is the back-end of OMG Forever, and handles all data storage and user management tasks.
 
+![Screenshot 8/31/2018](https://i.imgur.com/qiaz1J8.png)
+
 ## Contributing
 
 Not open for public contribution.
