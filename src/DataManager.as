@@ -35,7 +35,7 @@ package
             stream.open(file, FileMode.WRITE);
             stream.writeUTFBytes(JSON.stringify(data));
             stream.close();
-            Console.log("Data saved to " + file.nativePath, "config");
+            Console.log("Saved to " + file.nativePath, "config");
         }
 
         public function loadDataFromFile(): void
@@ -45,12 +45,12 @@ package
             stream.open(file, FileMode.READ);
             data = JSON.parse(stream.readUTFBytes(stream.bytesAvailable));
             stream.close();
-            Console.log("Data loaded from " + file.nativePath, "config");
+            Console.log("Loaded from " + file.nativePath, "config");
         }
 
         public function getData(id: String, category: String): Object
         {
-            return (data && data.category && data.category.id) ? data.category.id : null;
+            return (data && data[category] && data[category][id]) ? data[category][id] : null;
         }
     }
 }

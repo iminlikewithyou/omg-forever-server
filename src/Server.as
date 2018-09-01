@@ -82,7 +82,8 @@ package
             if (m.hasOwnProperty("request"))
             {
                 // Handle a request
-                s.send({"requestReturn": {id: m.request, data: dataManager.getData(m.request.id, m.request.category)}});
+                m.request.data = dataManager.getData(m.request.id, m.request.category);
+                s.send({"requestReturn": m.request});
             }
         }
 
