@@ -74,33 +74,56 @@ package
             // Handle all received data from sessions here
             var m: Object = e.data;
             var s: Session = Session(e.target);
-            var user: User;
 
             // Handle messages from all sessions, whether or not they are logged in
             Console.log(JSON.stringify(m), "stats");
 
             if (m.hasOwnProperty("request"))
             {
-                // Handle a request
+                /*
+                DATA REQUEST
+                 */
+
                 m.request.data = dataManager.getData(m.request.id, m.request.category);
                 s.send({"requestReturn": m.request});
             }
-        }
 
-        private function addUser(name: String, auth: Object): void
-        {
-            // Register a new user to users
-            //auth["emailVerified"] = false;
-            //auth["emailVerificationCode"] = Service.generateKey(1);
-            //
-            //if (Service.CLOSED_ALPHA)
-            //    delete keys[auth.alphaKey];
-            //
-            //users[name] = {name: name, auth: auth, online: false, timeCreated: new Date().time, nick: null};
-            //prepusers(name);
-            //
-            //var verifyEmailer: Emailer = new Emailer("mail.omgforever.com", 26, "verify@omgforever.com", "OMG4ever");
-            //verifyEmailer.send(name, "Verify your Email Address", verifyEmail.replace("%VERIFICATION_CODE%", auth.emailVerificationCode));
+            if (m.hasOwnProperty("registerAccount"))
+            {
+                /*
+                REGISTER
+                 */
+
+                // Check if Beta Key is valid
+                if (dataManager.getData(m.registerAccount.betaKey, "betaKeys"))
+                {
+                    // Check if Email is valid
+                    if (Service.isValidEmail(m.registerAccount.email))
+                    {
+                        //Check if Email is not already used
+                        if (!dataManager.getUserByEmail(m.registerAccount.email))
+                        {
+                            dataManager.addUser(m.registerAccount);
+                            s.send({"doLogin": {"email": m.registerAccount.email, "password": m.registerAccount.password}});
+                        }
+                        else
+                        {
+                            // Email is already used
+                            s.send({"error": "emailAlreadyUsed"});
+                        }
+                    }
+                    else
+                    {
+                        // Email is not valid
+                        s.send({"error": "emailNotValid"});
+                    }
+                }
+                else
+                {
+                    // Beta Key is invalid
+                    s.send({"error": "betaKeyNotValid"});
+                }
+            }
         }
 
         public function sendAll(data: Object): void

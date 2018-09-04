@@ -8,6 +8,8 @@ package
     import flash.filesystem.FileMode;
     import flash.filesystem.FileStream;
 
+    import mx.utils.UIDUtil;
+
     public final class DataManager extends EventDispatcher
     {
         private static var _instance: DataManager;
@@ -50,7 +52,37 @@ package
 
         public function getData(id: String, category: String): Object
         {
-            return (data && data[category] && data[category][id]) ? data[category][id] : null;
+            var response: Object = (data && data[category] && data[category][id]) ? data[category][id] : null;
+            if (category == "user")
+            {
+                // Handle permissions for user data
+                if (response)
+                    response.auth = null;
+            }
+
+            return response;
+        }
+
+        public function getUserByEmail(email: String): Object
+        {
+            for each (var user: Object in data.users)
+            {
+                if (user.auth.email == email)
+                    return user;
+            }
+
+            return null;
+        }
+
+        public function addUser(userObject: Object): void
+        {
+            Console.log("Adding new user ...\n" + JSON.stringify(userObject));
+        }
+
+        public function addBetaKey():String {
+            var newKey:String = UIDUtil.createUID();
+            data.betaKeys[newKey] = true;
+            return newKey;
         }
     }
 }

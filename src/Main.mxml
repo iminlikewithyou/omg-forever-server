@@ -14,6 +14,7 @@
         import mx.events.FlexEvent;
         
         private var server: Server;
+        private var dataManager: DataManager;
         
         private function onComplete(event: FlexEvent): void
         {
@@ -30,11 +31,14 @@
                 }
             });
             
+            // Data manager
+            dataManager = DataManager.getInstance();
+            
             // Start server
             server = new Server();
             
             // Autosave timer
-            var autosaveTimer: Timer = new Timer(60 * 1000);
+            var autosaveTimer: Timer = new Timer(10 * 60 * 1000);
             autosaveTimer.addEventListener(TimerEvent.TIMER, onAutosaveTimer);
             autosaveTimer.start();
         }
@@ -48,7 +52,7 @@
         {
             // Save before exiting
             event.preventDefault();
-            DataManager.getInstance().saveDataToFile();
+            dataManager.saveDataToFile();
             Console.log("Exiting ...", "config");
             setTimeout(stage.nativeWindow.close, 3000);
         }
@@ -56,7 +60,7 @@
         private function onAutosaveTimer(event: TimerEvent): void
         {
             Console.log("Autosaving ...", "config");
-            DataManager.getInstance().saveDataToFile();
+            dataManager.saveDataToFile();
         }
         
         private function command(str: String): void
@@ -67,12 +71,25 @@
             switch (str)
             {
                 case "save":
-                    DataManager.getInstance().saveDataToFile();
+                    dataManager.saveDataToFile();
                     break;
                 case "load":
-                    DataManager.getInstance().loadDataFromFile();
+                    dataManager.loadDataFromFile();
+                    break;
+                case "key":
+                    var betaKey: String = dataManager.addBetaKey();
+                    Clipboard.generalClipboard.clear();
+                    Clipboard.generalClipboard.setData(ClipboardFormats.TEXT_FORMAT, betaKey, false);
+                    Console.log("Beta Key copied to clipboard", "key");
+                    break;
+                case "help":
+                    Console.log("help .......... shows this help dialog\n" +
+                            "save .......... saves all data to a file\n" +
+                            "load .......... shows the help menu\n" +
+                            "key ........... generates a new beta key and copies it to the clipboard");
                     break;
                 default:
+                    Console.log("'" + str + "' isn't a recognized command\nType 'help' for a full list of commands", "alert");
                     break;
             }
         }

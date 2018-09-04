@@ -90,6 +90,8 @@ package
 
         public function send(data: Object): void
         {
+            trace("[send] " + JSON.stringify(data));
+
             try
             {
                 // Try to send an object to the socket

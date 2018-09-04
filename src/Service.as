@@ -20,6 +20,9 @@ package
         [Embed(source="/assets/icons/chat.png")]
         public static const ICON_CHAT: Class;
 
+        [Embed(source="/assets/icons/key.png")]
+        public static const ICON_KEY: Class;
+
         [Embed(source="/assets/icons/config.png")]
         public static const ICON_CONFIG: Class;
 
