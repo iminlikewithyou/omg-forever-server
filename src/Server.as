@@ -104,24 +104,24 @@ package
                         if (!dataManager.getUserByEmail(m.registerAccount.email))
                         {
                             dataManager.addUser(m.registerAccount);
-                            s.send({"doLogin": {"email": m.registerAccount.email, "password": m.registerAccount.password}});
+                            s.send({"login": {"email": m.registerAccount.email, "hash": m.registerAccount.hash, "password": m.registerAccount.password}});
                         }
                         else
                         {
                             // Email is already used
-                            s.send({"error": "emailAlreadyUsed"});
+                            s.send({startPopup: {id: "error", payload: "emailAlreadyUsed"}});
                         }
                     }
                     else
                     {
                         // Email is not valid
-                        s.send({"error": "emailNotValid"});
+                        s.send({startPopup: {id: "error", payload: "emailNotValid"}});
                     }
                 }
                 else
                 {
                     // Beta Key is invalid
-                    s.send({"error": "betaKeyNotValid"});
+                    s.send({startPopup: {id: "error", payload: "betaKeyNotValid"}});
                 }
             }
         }
