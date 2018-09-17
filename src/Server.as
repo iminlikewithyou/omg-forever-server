@@ -88,23 +88,26 @@ package
                 s.send({"requestReturn": m.request});
             }
 
-            if (m.hasOwnProperty("registerAccount"))
+            if (m.hasOwnProperty("register"))
             {
                 /*
                 REGISTER
                  */
 
                 // Check if Beta Key is valid
-                if (dataManager.getData(m.registerAccount.betaKey, "betaKeys"))
+                if (dataManager.getData(m.register.betaKey, "betaKeys"))
                 {
                     // Check if Email is valid
-                    if (Service.isValidEmail(m.registerAccount.email))
+                    if (Service.isValidEmail(m.register.email))
                     {
                         //Check if Email is not already used
-                        if (!dataManager.getUserByEmail(m.registerAccount.email))
+                        if (!dataManager.getUserByEmail(m.register.email))
                         {
-                            dataManager.addUser(m.registerAccount);
-                            s.send({"login": {"email": m.registerAccount.email, "hash": m.registerAccount.hash, "password": m.registerAccount.password}});
+                            // Add user
+                            dataManager.addUser(m.register);
+
+                            // Tell the session to login using its credentials
+                            s.send({"action": "rawLogin", "args": {"email": m.register.email, "password": m.register.password}});
                         }
                         else
                         {
@@ -122,6 +125,61 @@ package
                 {
                     // Beta Key is invalid
                     s.send({startPopup: {id: "error", payload: "betaKeyNotValid"}});
+                }
+            }
+
+            if (m.hasOwnProperty("login"))
+            {
+                /*
+                LOGIN
+                 */
+
+                // Check if Email exists
+                if (dataManager.getUserByEmail(m.login.email))
+                {
+                    // Check if password is a match
+                    var user: Object = dataManager.getUserByEmail(m.login.email);
+                    if (user.auth.password == m.login.password)
+                    {
+                        // Log user in
+                        // Record session info
+                        user.sessions.push({time: new Date().time, id: s.id, ip: s.ip, location: s.location});
+
+                        // Set session userId
+                        s.userId = user.id;
+
+                        // Check if Email is verified
+                        if (user.auth.verified)
+                        {
+                            // Check if user's name has been chosen
+                            if (user.name != "")
+                            {
+                                // Let the session know it's logged in
+                                // todo change the message?
+                                s.send({loggedIn: true});
+                            }
+                            else
+                            {
+                                // User's name has not been chosen
+                                s.send({startPopup: {id: "chooseName"}});
+                            }
+                        }
+                        else
+                        {
+                            // Email is not verified
+                            s.send({startPopup: {id: "verifyEmail", payload: m.login.email}});
+                        }
+                    }
+                    else
+                    {
+                        // Password is not valid
+                        s.send({startPopup: {id: "error", payload: "loginError"}});
+                    }
+                }
+                else
+                {
+                    // User by that Email was not found
+                    s.send({startPopup: {id: "error", payload: "loginError"}});
                 }
             }
         }

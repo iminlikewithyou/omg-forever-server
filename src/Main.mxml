@@ -59,7 +59,6 @@
         
         private function onAutosaveTimer(event: TimerEvent): void
         {
-            Console.log("Autosaving ...", "config");
             dataManager.saveDataToFile();
         }
         

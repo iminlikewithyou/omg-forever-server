@@ -1,8 +1,6 @@
 package
 {
 
-    import components.Console;
-
     import flash.events.*;
     import flash.net.*;
     import flash.utils.ByteArray;
@@ -19,6 +17,8 @@ package
         public var id: String;
         public var location: Object;
         public var ip: String;
+
+        public var userId:String;
 
         public var confirmed: Boolean;
         public var socket: Socket;

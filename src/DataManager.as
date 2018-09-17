@@ -8,6 +8,8 @@ package
     import flash.filesystem.FileMode;
     import flash.filesystem.FileStream;
 
+    import mx.utils.ObjectUtil;
+
     import mx.utils.UIDUtil;
 
     public final class DataManager extends EventDispatcher
@@ -52,7 +54,7 @@ package
 
         public function getData(id: String, category: String): Object
         {
-            var response: Object = (data && data[category] && data[category][id]) ? data[category][id] : null;
+            var response: Object = (data && data[category] && data[category][id]) ? ObjectUtil.clone(data[category][id]) : null;
             if (category == "user")
             {
                 // Handle permissions for user data
@@ -74,13 +76,37 @@ package
             return null;
         }
 
-        public function addUser(userObject: Object): void
+        public function addUser(auth: Object): void
         {
-            Console.log("Adding new user ...\n" + JSON.stringify(userObject));
+            var userKey: String = auth.betaKey;
+            // Just in case a user with this key already exists, check and generate a new one
+            while (data.users[userKey])
+                userKey = UIDUtil.createUID();
+
+            // Create the new user
+            auth.verified = false;
+            data.users[userKey] = {
+                id:       userKey,
+                auth:     auth,
+                exp:      0,
+                level:    0,
+                items:    [],
+                name:     "",
+                sessions: []
+            };
+
+            // Delete the old key from the available beta keys
+            delete data.betaKeys[auth.betaKey];
+            Console.log("Registered new account\n" + auth.email);
         }
 
-        public function addBetaKey():String {
-            var newKey:String = UIDUtil.createUID();
+        public function addBetaKey(): String
+        {
+            var newKey: String = UIDUtil.createUID();
+            // Make sure the key doesn't exist yet
+            while (data.betaKeys[newKey])
+                newKey = UIDUtil.createUID();
+
             data.betaKeys[newKey] = true;
             return newKey;
         }
