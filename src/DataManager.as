@@ -85,6 +85,7 @@ package
 
             // Create the new user
             auth.verified = false;
+            auth.verifyCode = Service.generateRandomString(6).toUpperCase();
             data.users[userKey] = {
                 id:       userKey,
                 auth:     auth,
@@ -98,6 +99,14 @@ package
             // Delete the old key from the available beta keys
             delete data.betaKeys[auth.betaKey];
             Console.log("Registered new account\n" + auth.email);
+
+            // Send the verifyCode to the user's Email
+            var emailer: Emailer = new Emailer("mail.omgforever.com", 26, "hey@omgforever.com", "KZ6kp48PREV2Z");
+            var verifyEmail: String = new Service.EMAIL_VERIFY();
+            verifyEmail = verifyEmail.replace("%VERIFY_CODE%", auth.verifyCode);
+            verifyEmail = verifyEmail.replace("%BOTTOM_TITLE%", "Did You Know?");
+            verifyEmail = verifyEmail.replace("%BOTTOM_MESSAGE%", "You can view the OMG Forever changelog from within the app.");
+            emailer.send(auth.email, "You're in! Please verify your Email", verifyEmail);
         }
 
         public function addBetaKey(): String

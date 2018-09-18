@@ -75,6 +75,9 @@ package
             var m: Object = e.data;
             var s: Session = Session(e.target);
 
+            // Reused variables
+            var user: Object;
+
             // Handle messages from all sessions, whether or not they are logged in
             Console.log(JSON.stringify(m), "stats");
 
@@ -138,7 +141,8 @@ package
                 if (dataManager.getUserByEmail(m.login.email))
                 {
                     // Check if password is a match
-                    var user: Object = dataManager.getUserByEmail(m.login.email);
+                    user = dataManager.getUserByEmail(m.login.email);
+
                     if (user.auth.password == m.login.password)
                     {
                         // Log user in
@@ -155,8 +159,7 @@ package
                             if (user.name != "")
                             {
                                 // Let the session know it's logged in
-                                // todo change the message?
-                                s.send({loggedIn: true});
+                                s.send({loginSuccess: true});
                             }
                             else
                             {
@@ -167,6 +170,7 @@ package
                         else
                         {
                             // Email is not verified
+                            Console.log("User " + user.auth.email + "'s Email verification code is " + user.auth.verifyCode);
                             s.send({startPopup: {id: "verifyEmail", payload: m.login.email}});
                         }
                     }
@@ -180,6 +184,35 @@ package
                 {
                     // User by that Email was not found
                     s.send({startPopup: {id: "error", payload: "loginError"}});
+                }
+            }
+
+            if (m.hasOwnProperty("resendVerifyCode"))
+            {
+                /*
+               RESEND VERIFY CODE
+                */
+
+                // Check if Email exists
+                if (dataManager.getUserByEmail(m.resendVerifyCode.email))
+                {
+                    user = dataManager.getUserByEmail(m.resendVerifyCode.email);
+                    if (!user.auth.verified)
+                    {
+                        // User is not verified
+                        // Send the verifyCode to the user's Email
+                        var emailer: Emailer = new Emailer("mail.omgforever.com", 26, "hey@omgforever.com", "KZ6kp48PREV2Z");
+                        var verifyEmail: String = new Service.EMAIL_VERIFY();
+                        verifyEmail = verifyEmail.replace("%VERIFY_CODE%", user.auth.verifyCode);
+                        verifyEmail = verifyEmail.replace("%BOTTOM_TITLE%", "Did You Know?");
+                        verifyEmail = verifyEmail.replace("%BOTTOM_MESSAGE%", "You can view the OMG Forever changelog from within the app.");
+                        emailer.send(user.auth.email, "Your Email Verification Code", verifyEmail);
+                    }
+                    else
+                    {
+                        // User is verified already
+                        s.send({startPopup: {id: "error", payload: "alreadyVerifiedError"}});
+                    }
                 }
             }
         }

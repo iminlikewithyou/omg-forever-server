@@ -18,7 +18,7 @@ package
         public var location: Object;
         public var ip: String;
 
-        public var userId:String;
+        public var userId: String;
 
         public var confirmed: Boolean;
         public var socket: Socket;
@@ -73,16 +73,27 @@ package
             id = UIDUtil.createUID();
 
             locationManager = LocationManager.getInstance();
-            location = locationManager.getLocation(ip);
+            if (locationManager.getLocation(ip))
+                location = JSON.parse(locationManager.getLocation(ip));
+
             if (!location)
+            {
                 locationManager.addEventListener(Event.COMPLETE, getLocationAgain);
+            }
+            else
+            {
+                location = {city: location.city, region: location.region_name, country: location.country_name};
+            }
         }
 
         private function getLocationAgain(event: Event): void
         {
-            location = locationManager.getLocation(ip);
+            if (locationManager.getLocation(ip))
+                location = JSON.parse(locationManager.getLocation(ip));
+
             if (location)
             {
+                location = {city: location.city, region: location.region_name, country: location.country_name};
                 locationManager.removeEventListener(Event.COMPLETE, getLocationAgain);
                 dispatchEvent(new SessionEvent(SessionEvent.LOCATION_FOUND));
             }
