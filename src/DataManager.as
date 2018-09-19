@@ -102,11 +102,11 @@ package
 
             // Send the verifyCode to the user's Email
             var emailer: Emailer = new Emailer("mail.omgforever.com", 26, "hey@omgforever.com", "KZ6kp48PREV2Z");
-            var verifyEmail: String = new Service.EMAIL_VERIFY();
-            verifyEmail = verifyEmail.replace("%VERIFY_CODE%", auth.verifyCode);
-            verifyEmail = verifyEmail.replace("%BOTTOM_TITLE%", "Did You Know?");
-            verifyEmail = verifyEmail.replace("%BOTTOM_MESSAGE%", "You can view the OMG Forever changelog from within the app.");
-            emailer.send(auth.email, "You're in! Please verify your Email", verifyEmail);
+            var email: String = new Service.EMAIL_WELCOME();
+            email = email.replace("%VERIFY_CODE%", auth.verifyCode);
+            email = email.replace("%BOTTOM_TITLE%", "Did You Know?");
+            email = email.replace("%BOTTOM_MESSAGE%", "You can view the OMG Forever changelog from within the app.");
+            emailer.send(auth.email, "You're in! Please verify your Email", email);
         }
 
         public function addBetaKey(): String

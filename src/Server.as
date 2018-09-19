@@ -10,7 +10,7 @@ package
     public class Server extends EventDispatcher
     {
         private var sessions: Object;
-        private var server: ServerSocket;
+        public var server: ServerSocket;
 
         private var dataManager: DataManager;
 
@@ -202,11 +202,11 @@ package
                         // User is not verified
                         // Send the verifyCode to the user's Email
                         var emailer: Emailer = new Emailer("mail.omgforever.com", 26, "hey@omgforever.com", "KZ6kp48PREV2Z");
-                        var verifyEmail: String = new Service.EMAIL_VERIFY();
-                        verifyEmail = verifyEmail.replace("%VERIFY_CODE%", user.auth.verifyCode);
-                        verifyEmail = verifyEmail.replace("%BOTTOM_TITLE%", "Did You Know?");
-                        verifyEmail = verifyEmail.replace("%BOTTOM_MESSAGE%", "You can view the OMG Forever changelog from within the app.");
-                        emailer.send(user.auth.email, "Your Email Verification Code", verifyEmail);
+                        var email: String = new Service.EMAIL_VERIFY();
+                        email = email.replace("%VERIFY_CODE%", user.auth.verifyCode);
+                        email = email.replace("%BOTTOM_TITLE%", "Did You Know?");
+                        email = email.replace("%BOTTOM_MESSAGE%", "You can view the OMG Forever changelog from within the app.");
+                        emailer.send(user.auth.email, "Your Email Verification Code", email);
                     }
                     else
                     {
@@ -231,7 +231,7 @@ package
                 s.send(data);
         }
 
-        public function send(session: Session, data: Object): void
+        public static function send(session: Session, data: Object): void
         {
             // Send a message to a specific session
             session.send(data);
