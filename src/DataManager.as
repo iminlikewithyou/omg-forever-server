@@ -65,6 +65,11 @@ package
             return response;
         }
 
+        public function getUserById(id: String): Object
+        {
+            return data.users[id];
+        }
+
         public function getUserByEmail(email: String): Object
         {
             for each (var user: Object in data.users)
@@ -78,16 +83,16 @@ package
 
         public function addUser(auth: Object): void
         {
-            var userKey: String = auth.betaKey;
+            var userId: String = auth.betaKey;
             // Just in case a user with this key already exists, check and generate a new one
-            while (data.users[userKey])
-                userKey = UIDUtil.createUID();
+            while (data.users[userId])
+                userId = UIDUtil.createUID();
 
             // Create the new user
             auth.verified = false;
             auth.verifyCode = Service.generateRandomString(6).toUpperCase();
-            data.users[userKey] = {
-                id:       userKey,
+            data.users[userId] = {
+                id:       userId,
                 auth:     auth,
                 exp:      0,
                 level:    0,

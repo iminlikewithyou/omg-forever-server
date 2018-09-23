@@ -145,16 +145,16 @@ package
 
                     if (user.auth.password == m.login.password)
                     {
-                        // Log user in
-                        // Record session info
-                        user.sessions.push({time: new Date().time, id: s.id, ip: s.ip, location: s.location});
-
-                        // Set session userId
-                        s.userId = user.id;
-
                         // Check if Email is verified
                         if (user.auth.verified)
                         {
+                            // Log user in
+                            // Record session info
+                            user.sessions.push({time: new Date().time, id: s.id, ip: s.ip, location: s.location});
+
+                            // Set session userId
+                            s.userId = user.id;
+
                             // Check if user's name has been chosen
                             if (user.name != "")
                             {
@@ -164,7 +164,7 @@ package
                             else
                             {
                                 // User's name has not been chosen
-                                s.send({startPopup: {id: "chooseName"}});
+                                s.send({startPopup: {id: "changeName"}});
                             }
                         }
                         else
@@ -177,13 +177,13 @@ package
                     else
                     {
                         // Password is not valid
-                        s.send({startPopup: {id: "error", payload: "loginError"}});
+                        s.send({startPopup: {id: "error", payload: "login"}});
                     }
                 }
                 else
                 {
                     // User by that Email was not found
-                    s.send({startPopup: {id: "error", payload: "loginError"}});
+                    s.send({startPopup: {id: "error", payload: "login"}});
                 }
             }
 
@@ -211,8 +211,87 @@ package
                     else
                     {
                         // User is verified already
-                        s.send({startPopup: {id: "error", payload: "alreadyVerifiedError"}});
+                        s.send({startPopup: {id: "error", payload: "alreadyVerified"}});
                     }
+                }
+                else
+                {
+                    // User by that Email was not found
+                    s.send({startPopup: {id: "error", payload: "userNotFound"}});
+                }
+            }
+
+            if (m.hasOwnProperty("submitVerifyCode"))
+            {
+                /*
+                SUBMIT VERIFY CODE
+                 */
+
+                // Check if Email exists
+                if (dataManager.getUserByEmail(m.submitVerifyCode.email))
+                {
+                    user = dataManager.getUserByEmail(m.submitVerifyCode.email);
+                    if (!user.auth.verified)
+                    {
+                        // User is not verified
+                        if (user.auth.verifyCode == m.submitVerifyCode.verifyCode)
+                        {
+                            // Verify user
+                            user.verified = true;
+
+                            // Log user in
+                            // Record session info
+                            user.sessions.push({time: new Date().time, id: s.id, ip: s.ip, location: s.location});
+
+                            // Set session userId
+                            s.userId = user.id;
+
+                            // Check if user's name has been chosen
+                            if (user.name != "")
+                            {
+                                // Let the session know it's logged in
+                                s.send({loginSuccess: true});
+                            }
+                            else
+                            {
+                                // User's name has not been chosen
+                                s.send({startPopup: {id: "changeName", payload: "initial"}});
+                            }
+                        }
+                        else
+                        {
+                            // VerifyCode is not valid
+                            s.send({startPopup: {id: "error", payload: "verifyCodeNotValid"}});
+                        }
+                    }
+                    else
+                    {
+                        // User is verified already
+                        s.send({startPopup: {id: "error", payload: "alreadyVerified"}});
+                    }
+                }
+                else
+                {
+                    // User by that Email was not found
+                    s.send({startPopup: {id: "error", payload: "userNotFound"}});
+                }
+            }
+
+            if (m.hasOwnProperty("changeName"))
+            {
+                /*
+                CHANGE NAME
+                 */
+
+                user = dataManager.getUserById(m.changeName.id);
+                if (s.userId == user.id)
+                {
+                    // Change the user's name
+                    user.name = m.changeName.name;
+                }
+                else
+                {
+                    // Session is not logged in as user
                 }
             }
         }

@@ -50,6 +50,8 @@ package
                     socket.flush();
                     dispatchEvent(new MessageEvent(data));
 
+                    trace("[receive] " + JSON.stringify(data));
+
                     // Set policy to true
                     policy = true;
 
