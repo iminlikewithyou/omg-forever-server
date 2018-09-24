@@ -164,7 +164,7 @@ package
                             else
                             {
                                 // User's name has not been chosen
-                                s.send({startPopup: {id: "changeName"}});
+                                s.send({startPopup: {id: "chooseName"}});
                             }
                         }
                         else
@@ -237,7 +237,7 @@ package
                         if (user.auth.verifyCode == m.submitVerifyCode.verifyCode)
                         {
                             // Verify user
-                            user.verified = true;
+                            user.auth.verified = true;
 
                             // Log user in
                             // Record session info
@@ -255,7 +255,7 @@ package
                             else
                             {
                                 // User's name has not been chosen
-                                s.send({startPopup: {id: "changeName", payload: "initial"}});
+                                s.send({startPopup: {id: "chooseName", payload: "initial"}});
                             }
                         }
                         else
@@ -277,22 +277,15 @@ package
                 }
             }
 
-            if (m.hasOwnProperty("changeName"))
+            if (m.hasOwnProperty("chooseName"))
             {
                 /*
-                CHANGE NAME
+                CHOOSE NAME
                  */
 
-                user = dataManager.getUserById(m.changeName.id);
-                if (s.userId == user.id)
-                {
-                    // Change the user's name
-                    user.name = m.changeName.name;
-                }
-                else
-                {
-                    // Session is not logged in as user
-                }
+                // Change the user's name
+                user = dataManager.getUserById(s.userId);
+                user.name = m.chooseName.name;
             }
         }
 
