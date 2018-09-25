@@ -150,7 +150,7 @@ package
                         {
                             // Log user in
                             // Record session info
-                            user.sessions.push({time: new Date().time, id: s.id, ip: s.ip, location: s.location});
+                            user.sessions.push({type: "login", time: new Date().time, id: s.id, ip: s.ip, location: s.location});
 
                             // Set session userId
                             s.userId = user.id;
@@ -159,7 +159,7 @@ package
                             if (user.name != "")
                             {
                                 // Let the session know it's logged in
-                                s.send({loginSuccess: true});
+                                s.send({login: true});
                             }
                             else
                             {
@@ -177,13 +177,13 @@ package
                     else
                     {
                         // Password is not valid
-                        s.send({startPopup: {id: "error", payload: "login"}});
+                        s.send({startPopup: {id: "error", payload: "errorLogin"}});
                     }
                 }
                 else
                 {
                     // User by that Email was not found
-                    s.send({startPopup: {id: "error", payload: "login"}});
+                    s.send({startPopup: {id: "error", payload: "errorLogin"}});
                 }
             }
 
@@ -211,13 +211,13 @@ package
                     else
                     {
                         // User is verified already
-                        s.send({startPopup: {id: "error", payload: "alreadyVerified"}});
+                        s.send({startPopup: {id: "error", payload: "errorAlreadyVerified"}});
                     }
                 }
                 else
                 {
                     // User by that Email was not found
-                    s.send({startPopup: {id: "error", payload: "userNotFound"}});
+                    s.send({startPopup: {id: "error", payload: "errorUserNotFound"}});
                 }
             }
 
@@ -250,7 +250,7 @@ package
                             if (user.name != "")
                             {
                                 // Let the session know it's logged in
-                                s.send({loginSuccess: true});
+                                s.send({login: true});
                             }
                             else
                             {
@@ -261,19 +261,19 @@ package
                         else
                         {
                             // VerifyCode is not valid
-                            s.send({startPopup: {id: "error", payload: "verifyCodeNotValid"}});
+                            s.send({startPopup: {id: "error", payload: "errorVerifyCodeNotValid"}});
                         }
                     }
                     else
                     {
                         // User is verified already
-                        s.send({startPopup: {id: "error", payload: "alreadyVerified"}});
+                        s.send({startPopup: {id: "error", payload: "errorAlreadyVerified"}});
                     }
                 }
                 else
                 {
                     // User by that Email was not found
-                    s.send({startPopup: {id: "error", payload: "userNotFound"}});
+                    s.send({startPopup: {id: "error", payload: "errorUserNotFound"}});
                 }
             }
 
@@ -286,6 +286,19 @@ package
                 // Change the user's name
                 user = dataManager.getUserById(s.userId);
                 user.name = m.chooseName.name;
+                s.send({login: true});
+            }
+
+            if (m.hasOwnProperty("logout"))
+            {
+                /*
+                LOGOUT
+                 */
+
+                // Logout the current session
+                user = dataManager.getUserById(s.userId);
+                user.sessions.push({type: "logout", time: new Date().time, id: s.id, ip: s.ip, location: s.location});
+                s.userId = null;
             }
         }
 

@@ -18,7 +18,7 @@ package
         public var location: Object;
         public var ip: String;
 
-        public var userId: String;
+        public var userId: String = null;
 
         public var confirmed: Boolean;
         public var socket: Socket;
