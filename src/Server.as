@@ -159,7 +159,7 @@ package
                             if (user.name != "")
                             {
                                 // Let the session know it's logged in
-                                s.send({login: true});
+                                s.send({login: true, id: user.id});
                             }
                             else
                             {
@@ -250,7 +250,7 @@ package
                             if (user.name != "")
                             {
                                 // Let the session know it's logged in
-                                s.send({login: true});
+                                s.send({login: true, id: user.id});
                             }
                             else
                             {
@@ -286,7 +286,7 @@ package
                 // Change the user's name
                 user = dataManager.getUserById(s.userId);
                 user.name = m.chooseName.name;
-                s.send({login: true});
+                s.send({login: true, id: user.id});
             }
 
             if (m.hasOwnProperty("logout"))
