@@ -39,7 +39,6 @@ package
             stream.open(file, FileMode.WRITE);
             stream.writeUTFBytes(JSON.stringify(data));
             stream.close();
-            Console.log("Saved to " + file.nativePath, "config");
         }
 
         public function loadDataFromFile(): void
