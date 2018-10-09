@@ -38,6 +38,13 @@
         {
             super.data = ObjectUtil.clone(value);
             
+            try
+            {
+                locationManager.removeEventListener(Event.COMPLETE, tryAppendLocationText);
+            } catch (error: Error)
+            {
+            }
+            
             if (initialized)
             {
                 update();
