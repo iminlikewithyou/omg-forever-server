@@ -22,3 +22,5 @@ This work is licensed under a Creative Commons Attribution-NonCommercial-NoDeriv
 * OMG Forever Assets
 * Greensock TweenLite
 * AS3Crypto
+* BulkLoader
+* SMTPMailer
