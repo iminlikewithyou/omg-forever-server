@@ -31,8 +31,8 @@
                                     <td style="word-break:break-word;font-size:0px;padding:0px 0px 20px;" align="left">
                                         <div style="cursor:auto;color:#737F8D;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:16px;line-height:24px;text-align:left;">
                                             <h2 style="font-family: Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-weight: 500;font-size: 20px;color: #4F545C;letter-spacing: 0.27px;">Hey,</h2>
-                                            <p>Please confirm that you want to use this as your OMG Forever Email.</p>
-                                            <p>Use the code below to confirm your Email.</p>
+                                            <p>Please confirm that you want to use this as your OMG Forever email.</p>
+                                            <p>Use the code below to confirm your email.</p>
                                         </div>
                                     </td>
                                 </tr>
