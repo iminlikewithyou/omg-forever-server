@@ -33,7 +33,7 @@
                                             <h2 style="font-family: Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-weight: 500;font-size: 20px;color: #4F545C;letter-spacing: 0.27px;">Awesome!</h2>
                                             <p>We're so glad you're here. You're almost ready to deck out your profile, play sweet games, and make weird friends.</p>
                                             <p>Before you get started, we'll need to verify your email.</p>
-                                            <p>Use the code below to confirm your Email.</p>
+                                            <p>Use the code below to confirm your email.</p>
                                         </div>
                                     </td>
                                 </tr>
