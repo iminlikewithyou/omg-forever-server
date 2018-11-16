@@ -51,6 +51,11 @@ package
             Console.log("Loaded from " + file.nativePath, "config");
         }
 
+        public function getEmailerPassword(): String
+        {
+            return data.emailerPassword;
+        }
+
         public function getData(id: String, category: String): Object
         {
             var response: Object = (data && data[category] && data[category][id]) ? ObjectUtil.clone(data[category][id]) : null;
@@ -105,12 +110,12 @@ package
             Console.log("Registered new account\n" + auth.email);
 
             // Send the verifyCode to the user's Email
-            var emailer: Emailer = new Emailer("mail.omgforever.com", 26, "hey@omgforever.com", "KZ6kp48PREV2Z");
+            var emailer: Emailer = new Emailer("mail.omgforever.com", 26, "hey@omgforever.com", getEmailerPassword());
             var email: String = new Service.EMAIL_WELCOME();
             email = email.replace("%VERIFY_CODE%", auth.verifyCode);
             email = email.replace("%BOTTOM_TITLE%", "Did You Know?");
             email = email.replace("%BOTTOM_MESSAGE%", "You can view the OMG Forever changelog from within the app.");
-            emailer.send(auth.email, "You're in! Please verify your Email", email);
+            emailer.send(auth.email, "You're in! Please verify your email", email);
         }
 
         public function addBetaKey(): String
