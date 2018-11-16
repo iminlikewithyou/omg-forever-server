@@ -201,12 +201,12 @@ package
                     {
                         // User is not verified
                         // Send the verifyCode to the user's Email
-                        var emailer: Emailer = new Emailer("mail.omgforever.com", 26, "hey@omgforever.com", "KZ6kp48PREV2Z");
+                        var emailer: Emailer = new Emailer("mail.omgforever.com", 26, "hey@omgforever.com", dataManager.getEmailerPassword());
                         var email: String = new Service.EMAIL_VERIFY();
                         email = email.replace("%VERIFY_CODE%", user.auth.verifyCode);
                         email = email.replace("%BOTTOM_TITLE%", "Did You Know?");
                         email = email.replace("%BOTTOM_MESSAGE%", "You can view the OMG Forever changelog from within the app.");
-                        emailer.send(user.auth.email, "Your Email Verification Code", email);
+                        emailer.send(user.auth.email, "Your email verification code", email);
                     }
                     else
                     {
