@@ -46,7 +46,7 @@ package
             function sendEmail(): void
             {
                 // Send Email
-                myMailer.sendHTMLMail(address, recipient, subject, message);
+                myMailer.sendHTMLMail(address, recipient, subject, message, "OMG Forever");
             }
 
             function onAuthSuccess(e: SMTPEvent): void
